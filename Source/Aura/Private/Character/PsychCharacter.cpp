@@ -5,7 +5,10 @@
 
 #include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/PsychPlayerController.h"
 #include "Player/PsychPlayerState.h"
+#include "UI/HUD/PsychHUD.h"
+
 
 APsychCharacter::APsychCharacter()
 {
@@ -25,6 +28,8 @@ void APsychCharacter::PossessedBy(AController* NewController)
 	
 	//init ability actor info for the server
 	InitAbilityActorInfo();
+
+
 }
 
 void APsychCharacter::OnRep_PlayerState()
@@ -43,4 +48,13 @@ void APsychCharacter::InitAbilityActorInfo()
 	PsychPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(PsychPlayerState,this);
 	AbilitySystemComponent = PsychPlayerState->GetAbilitySystemComponent();
 	AttributeSet = PsychPlayerState->GetAttributeSet();
+
+	if(APsychPlayerController* PsychPlayerController = Cast<APsychPlayerController>(GetController()))
+	{
+		if (APsychHUD* PsychHUD = Cast<APsychHUD>(PsychPlayerController->GetHUD()))
+		{
+			PsychHUD->InitOverlay(PsychPlayerController,PsychPlayerState,AbilitySystemComponent,AttributeSet);
+		}
+	}
+	
 }

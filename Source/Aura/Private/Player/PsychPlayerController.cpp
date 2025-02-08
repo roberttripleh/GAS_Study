@@ -88,9 +88,12 @@ void APsychPlayerController::BeginPlay()
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	
-	check(Subsystem);
+	if(Subsystem)
+	{
+		Subsystem->AddMappingContext(PsychContext, 0);	
+	}
 
-	Subsystem->AddMappingContext(PsychContext, 0);
+	
 
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
