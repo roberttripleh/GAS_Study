@@ -12,7 +12,8 @@ UOverlayWidgetController* APsychHUD::GetOverlayWidgetController(const FWidgetCon
 	{
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(WCParams);
-
+		OverlayWidgetController->BindCallbacksToDependencies();
+		
 		return OverlayWidgetController;
 	}
 	return OverlayWidgetController;
@@ -32,7 +33,7 @@ void APsychHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySys
 	UOverlayWidgetController* WidgetController = GetOverlayWidgetController(WidgetControllerParams);
 
 	OverlayWidget->SetWidgetController(WidgetController);
-
+	WidgetController->BroadcastInitialValues();
 	
 	Widget->AddToViewport();	
 }

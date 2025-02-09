@@ -8,10 +8,10 @@
 
 UPsychAttributeSet::UPsychAttributeSet()
 {
-	InitHealth(100.f);
-	InitMana(100.f);
-	InitMaxHealth(50.f);
-	InitMaxMana(50.f);
+	InitHealth(50.f);
+	InitMaxHealth(150.f);
+	InitMana(25.f);
+	InitMaxMana(150.f);
 }
 
 void UPsychAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

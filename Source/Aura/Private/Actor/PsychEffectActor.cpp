@@ -32,6 +32,7 @@ void APsychEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 
 		UPsychAttributeSet* MutablePsychAttributeSet=const_cast<UPsychAttributeSet*>(PsychAttributeSet);
 		MutablePsychAttributeSet->SetHealth(PsychAttributeSet->GetHealth() + 25.f);
+		MutablePsychAttributeSet->SetMana(PsychAttributeSet->GetMana() + 10.f);
 		Destroy();
 	}
 }

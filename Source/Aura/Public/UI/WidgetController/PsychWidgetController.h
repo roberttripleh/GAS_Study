@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "UObject/NoExportTypes.h"
 #include "PsychWidgetController.generated.h"
 
 class UAttributeSet;
@@ -42,6 +41,8 @@ class AURA_API UPsychWidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
+	virtual void BroadcastInitialValues();
+	virtual void BindCallbacksToDependencies();
 protected:
 
 	UPROPERTY(BlueprintReadOnly,Category="WidgetController")

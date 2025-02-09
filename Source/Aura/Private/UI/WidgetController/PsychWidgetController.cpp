@@ -10,3 +10,11 @@ void UPsychWidgetController::SetWidgetControllerParams(const FWidgetControllerPa
 	AbilitySystemComponent = WCParams.AbilitySystemComponent;
 	AttributeSet = WCParams.AttributeSet;
 }
+
+void UPsychWidgetController::BroadcastInitialValues()
+{
+}
+
+void UPsychWidgetController::BindCallbacksToDependencies()
+{
+}
