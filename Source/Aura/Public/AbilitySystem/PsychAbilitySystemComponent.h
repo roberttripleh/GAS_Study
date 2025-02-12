@@ -13,7 +13,7 @@ UCLASS()
 class AURA_API UPsychAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
-	//
+	
 public:
 	void AbilityActorInfoSet();
 	
