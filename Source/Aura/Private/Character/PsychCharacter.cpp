@@ -4,6 +4,7 @@
 #include "Character/PsychCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/PsychAbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/PsychPlayerController.h"
 #include "Player/PsychPlayerState.h"
@@ -46,6 +47,7 @@ void APsychCharacter::InitAbilityActorInfo()
 	APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
 	check(PsychPlayerState)
 	PsychPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(PsychPlayerState,this);
+	Cast<UPsychAbilitySystemComponent>(PsychPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	AbilitySystemComponent = PsychPlayerState->GetAbilitySystemComponent();
 	AttributeSet = PsychPlayerState->GetAttributeSet();
 

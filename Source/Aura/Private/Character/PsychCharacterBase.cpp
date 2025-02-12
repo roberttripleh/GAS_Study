@@ -27,4 +27,8 @@ void APsychCharacterBase::BeginPlay()
 	
 }
 
+void APsychCharacterBase::InitAbilityActorInfo()
+{
+}
+
 

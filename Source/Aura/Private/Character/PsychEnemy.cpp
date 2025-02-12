@@ -36,6 +36,11 @@ void APsychEnemy::UnHighlightActor()
 void APsychEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	check(AbilitySystemComponent);
+	InitAbilityActorInfo();
+}
+
+void APsychEnemy::InitAbilityActorInfo()
+{
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	Cast<UPsychAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
