@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 
+#include "AbilitySystem/PsychAbilitySystemComponent.h"
 #include "AbilitySystem/PsychAttributeSet.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
@@ -31,6 +32,17 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		PsychAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
+
+	Cast<UPsychAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+	[](const FGameplayTagContainer& AssetTags)
+	{
+		for (const FGameplayTag& Tag : AssetTags)
+		{
+			const FString Msg = FString::Printf(TEXT("GE Tag: %s"),*Tag.ToString());
+			GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Blue, Msg);
+		} 
+	}
+	);
 }
 
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
