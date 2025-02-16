@@ -9,7 +9,8 @@ void UPsychAbilitySystemComponent::AbilityActorInfoSet()
 }
 
 void UPsychAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
-                                                 const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+                                                 const FGameplayEffectSpec& EffectSpec,
+                                                 FActiveGameplayEffectHandle ActiveEffectHandle)
 {
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
