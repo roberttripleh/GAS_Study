@@ -58,4 +58,5 @@ void APsychCharacter::InitAbilityActorInfo()
 			PsychHUD->InitOverlay(PsychPlayerController,PsychPlayerState,AbilitySystemComponent,AttributeSet);
 		}
 	}
+	InitializePrimaryAttributes();
 }
