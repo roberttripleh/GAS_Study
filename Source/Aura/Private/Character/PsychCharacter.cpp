@@ -41,6 +41,14 @@ void APsychCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 APsychCharacter::GetPlayerLevel()
+{
+	const APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
+	check(PsychPlayerState);
+	
+	return PsychPlayerState->GetPlayerLevel();
+}
+
 //init ability actor info
 void APsychCharacter::InitAbilityActorInfo()
 {

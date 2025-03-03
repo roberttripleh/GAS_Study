@@ -33,6 +33,11 @@ void APsychEnemy::UnHighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
+int32 APsychEnemy::GetPlayerLevel()
+{
+	return Level;
+}
+
 void APsychEnemy::BeginPlay()
 {
 	Super::BeginPlay();

@@ -36,7 +36,10 @@ void APsychCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> Gamepla
 	check(IsValid(GetAbilitySystemComponent()));
 	check(GameplayEffectClass);
 	
-	const FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+
+	ContextHandle.AddSourceObject(this);
+	
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(
 													GameplayEffectClass, Level,ContextHandle);
 	
@@ -48,6 +51,7 @@ void APsychCharacterBase::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributes,1);
 	ApplyEffectToSelf(DefaultSecondaryAttributes,1);
+	ApplyEffectToSelf(DefaultVitalAttributes,1);
 }
 
 

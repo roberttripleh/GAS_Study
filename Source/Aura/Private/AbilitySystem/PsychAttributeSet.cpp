@@ -11,8 +11,7 @@
 
 UPsychAttributeSet::UPsychAttributeSet()
 {
-	InitHealth(50.f);
-	InitMana(25.f);
+	
 }
 
 void UPsychAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
