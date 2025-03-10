@@ -29,7 +29,7 @@ void APsychCharacter::PossessedBy(AController* NewController)
 	
 	//init ability actor info for the server
 	InitAbilityActorInfo();
-
+	AddCharacterAbilities();
 
 }
 

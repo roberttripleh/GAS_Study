@@ -3,6 +3,7 @@
 
 #include "Character/PsychCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/PsychAbilitySystemComponent.h"
 
 APsychCharacterBase::APsychCharacterBase()
 {
@@ -52,6 +53,16 @@ void APsychCharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributes,1);
 	ApplyEffectToSelf(DefaultSecondaryAttributes,1);
 	ApplyEffectToSelf(DefaultVitalAttributes,1);
+}
+
+void APsychCharacterBase::AddCharacterAbilities()
+{
+	
+	UPsychAbilitySystemComponent* PsychASC = CastChecked<UPsychAbilitySystemComponent>(AbilitySystemComponent);
+	if(!HasAuthority()) return;
+
+	PsychASC->AddCharacterAbilities(StartupAbilities);
+	
 }
 
 
