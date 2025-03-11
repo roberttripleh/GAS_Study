@@ -67,3 +67,4 @@ void UPsychAbilitySystemComponent::ClientEffectApplied_Implementation(
 	EffectSpec.GetAllAssetTags(TagContainer);
 	EffectAssetTags.Broadcast(TagContainer);
 }
+	

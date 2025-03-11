@@ -28,6 +28,12 @@ void APsychCharacterBase::BeginPlay()
 	
 }
 
+FVector APsychCharacterBase::GetCombatSocketLocation()
+{
+	check(Weapon);
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 void APsychCharacterBase::InitAbilityActorInfo()
 {
 }
