@@ -2,6 +2,8 @@
 
 
 #include "PsychAssetManager.h"
+
+#include "AbilitySystemGlobals.h"
 #include "PsychGameplayTags.h"
 
 UPsychAssetManager& UPsychAssetManager::Get()
@@ -17,7 +19,8 @@ UPsychAssetManager& UPsychAssetManager::Get()
 void UPsychAssetManager::StartInitialLoading()
 {
 	Super::StartInitialLoading();
-
-	FPsychGameplayTags::InitializeNativeGameplayTags();
 	
+	FPsychGameplayTags::InitializeNativeGameplayTags();
+
+	UAbilitySystemGlobals::Get().InitGlobalData(); 
 }

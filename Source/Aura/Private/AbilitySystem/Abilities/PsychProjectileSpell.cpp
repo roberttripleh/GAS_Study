@@ -14,7 +14,13 @@ void UPsychProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Han
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	const bool bIsServer = HasAuthority(&ActivationInfo);
+	
+	
+}
+
+void UPsychProjectileSpell::SpawnProjectile()
+{
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if(!bIsServer) return;
 
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
@@ -37,5 +43,4 @@ void UPsychProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Han
 		
 		Projectile->FinishSpawning(SpawnTransform);
 	}
-	
 }
