@@ -48,4 +48,6 @@ void APsychEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UPsychAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+
+	InitializeDefaultAttributes();
 }

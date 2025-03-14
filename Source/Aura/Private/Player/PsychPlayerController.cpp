@@ -81,11 +81,9 @@ void APsychPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		return;
 	}
 
-	if (bTargeting)
-	{
-		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
-	}
-	else
+	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+	
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControlledPawn)
@@ -121,7 +119,7 @@ void APsychPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 
-	if (bTargeting)
+	if (bTargeting || bShiftKeyDown)
 	{
 		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 	}
@@ -179,15 +177,28 @@ void APsychPlayerController::SetupInputComponent()
 
 	UPsychInputComponent* PsychInputComponent = CastChecked<UPsychInputComponent>(InputComponent);
 	
-	PsychInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered,
+	PsychInputComponent->BindAction(
+		MoveAction, ETriggerEvent::Triggered,
 		this, &APsychPlayerController::Move);
 
-	PsychInputComponent->BindAbilityActions(InputConfig,
-										this,
-											&ThisClass::AbilityInputTagPressed,
-											&ThisClass::AbilityInputTagReleased,
-											&ThisClass::AbilityInputTagHeld);
+	PsychInputComponent->BindAction(
+		ShiftAction,ETriggerEvent::Started,
+		this,
+		&APsychPlayerController::ShiftPressed);
+
+	PsychInputComponent->BindAction(
+	ShiftAction,ETriggerEvent::Completed,
+	this,
+	&APsychPlayerController::ShiftReleased);
+
+	PsychInputComponent->BindAbilityActions(
+		InputConfig,
+	this,
+		&ThisClass::AbilityInputTagPressed,
+		&ThisClass::AbilityInputTagReleased,
+		&ThisClass::AbilityInputTagHeld);
 }
+
 
 void APsychPlayerController::Move(const FInputActionValue& InputActionValue)
 {

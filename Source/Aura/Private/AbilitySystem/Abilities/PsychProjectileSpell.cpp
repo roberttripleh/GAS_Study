@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/PsychProjectileSpell.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Actor/PsychProjectile.h"
 #include "Interaction/CombatInterface.h"
 
@@ -15,10 +17,10 @@ void UPsychProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 	
-	
+	 
 }
 
-void UPsychProjectileSpell::SpawnProjectile()
+void UPsychProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if(!bIsServer) return;
@@ -28,9 +30,12 @@ void UPsychProjectileSpell::SpawnProjectile()
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
 
+		//projectile rotation is parallel to the ground
+		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
-		//TODO: Set the projectile rotation
+		SpawnTransform.SetRotation(Rotation.Quaternion());
 		
 		APsychProjectile* Projectile = GetWorld()->SpawnActorDeferred<APsychProjectile>(
 			ProjectileClass,
@@ -39,7 +44,14 @@ void UPsychProjectileSpell::SpawnProjectile()
 			Cast<APawn>(GetOwningActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-		//TODO: Give the projectile a gameplay effect spec for causing damage.
+		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+
+		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(
+			DamageEffectClass,
+			GetAbilityLevel(),
+			SourceASC->MakeEffectContext());
+
+		Projectile->DamageEffectSpecHandle = SpecHandle;
 		
 		Projectile->FinishSpawning(SpawnTransform);
 	}

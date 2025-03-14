@@ -7,6 +7,7 @@
 #include "PsychProjectileSpell.generated.h"
 
 class APsychProjectile;
+class UGameplayEffect;
 /**
  * 
  */
@@ -22,9 +23,12 @@ protected:
 								 const FGameplayEventData* TriggerEventData) override;
 
 	UFUNCTION(BlueprintCallable,Category="Projectile")
-	void SpawnProjectile();
+	void SpawnProjectile(const FVector& ProjectileTargetLocation);
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<APsychProjectile> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 	
 };
