@@ -6,6 +6,8 @@
 #include "AbilitySystem/PsychAbilitySystemComponent.h"
 #include "AbilitySystem/PsychAttributeSet.h"
 #include "Aura/Aura.h"
+#include "Components/WidgetComponent.h"
+#include "UI/Widget/PsychUserWidget.h"
 
 APsychEnemy::APsychEnemy()
 {
@@ -16,7 +18,10 @@ APsychEnemy::APsychEnemy()
 	AbilitySystemComponent-> SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
 	AttributeSet = CreateDefaultSubobject<UPsychAttributeSet>("AttributeSet");
+
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("Health Bar");
 	
+	HealthBar->SetupAttachment(GetRootComponent());
 }
 
 void APsychEnemy::HighlightActor()
@@ -42,6 +47,36 @@ void APsychEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
+
+	if(UPsychUserWidget* PsychUserWidget = Cast<UPsychUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		PsychUserWidget->SetWidgetController(this);
+	}
+	
+	if(const UPsychAttributeSet* PsychAS = Cast<UPsychAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			PsychAS->GetHealthAttribute())
+		.AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnHealthChanged.Broadcast(Data.NewValue);
+		}
+		);
+		
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			PsychAS->GetMaxHealthAttribute())
+		.AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxHealthChanged.Broadcast(Data.NewValue);
+		}
+		);
+
+		OnHealthChanged.Broadcast(PsychAS->GetHealth());
+		OnMaxHealthChanged.Broadcast(PsychAS->GetMaxHealth());
+	}
+
 }
 
 void APsychEnemy::InitAbilityActorInfo()

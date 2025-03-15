@@ -124,7 +124,8 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
-		UE_LOG(LogTemp, Warning, TEXT("ChangedHealth on %s, Health: %f"), *Props.TargetAvatarActor->GetName(), GetHealth());
+		UE_LOG(LogTemp, Warning, TEXT("ChangedHealth on %s, Health: %f"),
+			*Props.TargetAvatarActor->GetName(), GetHealth());
 	}
 	
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
