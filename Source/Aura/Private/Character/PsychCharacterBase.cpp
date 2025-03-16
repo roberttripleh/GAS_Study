@@ -30,6 +30,11 @@ UAbilitySystemComponent* APsychCharacterBase::GetAbilitySystemComponent() const
 }
 
 
+UAnimMontage* APsychCharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 void APsychCharacterBase::BeginPlay() 
 {
 	Super::BeginPlay();

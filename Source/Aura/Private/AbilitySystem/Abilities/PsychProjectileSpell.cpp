@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "Actor/PsychProjectile.h"
 #include "Interaction/CombatInterface.h"
+#include "PsychGameplayTags.h"
 
 
 void UPsychProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -51,7 +52,16 @@ void UPsychProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 			DamageEffectClass,
 			GetAbilityLevel(),
 			SourceASC->MakeEffectContext());
- 
+
+		const FPsychGameplayTags GameplayTags = FPsychGameplayTags::Get();
+		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+		
+		
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(
+			SpecHandle,
+			GameplayTags.Damage,
+			ScaledDamage);
+		
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		
 		Projectile->FinishSpawning(SpawnTransform);

@@ -15,7 +15,11 @@ class AURA_API UPsychGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 	
 public:
+	
 	UPROPERTY(EditDefaultsOnly,Category="Input")
 	FGameplayTag StartupInputTag;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Damage")
+	FScalableFloat Damage;
 	
 };

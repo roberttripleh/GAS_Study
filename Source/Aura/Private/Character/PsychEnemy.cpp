@@ -4,10 +4,13 @@
 #include "Character/PsychEnemy.h"
 
 #include "AbilitySystem/PsychAbilitySystemComponent.h"
+#include "AbilitySystem/PsychAbilitySystemLibrary.h"
 #include "AbilitySystem/PsychAttributeSet.h"
 #include "Aura/Aura.h"
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/PsychUserWidget.h"
+#include "PsychGameplayTags.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 APsychEnemy::APsychEnemy()
 {
@@ -46,6 +49,7 @@ int32 APsychEnemy::GetPlayerLevel()
 void APsychEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
 
 	if(UPsychUserWidget* PsychUserWidget = Cast<UPsychUserWidget>(HealthBar->GetUserWidgetObject()))
@@ -72,11 +76,25 @@ void APsychEnemy::BeginPlay()
 			OnMaxHealthChanged.Broadcast(Data.NewValue);
 		}
 		);
-
+		
+		AbilitySystemComponent->RegisterGameplayTagEvent(
+			FPsychGameplayTags::Get().Effects_HitReact,
+			EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,
+			&APsychEnemy::HitReactTagChanged
+			);
+		
 		OnHealthChanged.Broadcast(PsychAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(PsychAS->GetMaxHealth());
 	}
 
+}
+
+void APsychEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	
 }
 
 void APsychEnemy::InitAbilityActorInfo()
@@ -85,4 +103,13 @@ void APsychEnemy::InitAbilityActorInfo()
 	Cast<UPsychAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
 	InitializeDefaultAttributes();
+}
+
+void APsychEnemy::InitializeDefaultAttributes() const
+{
+	UPsychAbilitySystemLibrary::InitializeDefaultAttributes(
+		this,
+		CharacterClass,
+		Level,
+		AbilitySystemComponent);
 }
