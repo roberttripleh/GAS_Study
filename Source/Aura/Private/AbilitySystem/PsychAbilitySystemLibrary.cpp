@@ -58,14 +58,12 @@ void UPsychAbilitySystemLibrary::InitializeDefaultAttributes(
 	float Level,
 	UAbilitySystemComponent* ASC)
 {
-	APsychGameModeBase* PsychGameMode = Cast<APsychGameModeBase>(
-		UGameplayStatics::GetGameMode(WorldContextObject));
-
-	if(PsychGameMode == nullptr) return;
-
 	AActor* AvatarActor = ASC->GetAvatarActor();
 	
-	UCharacterClassInfo* CharacterClassInfo = PsychGameMode->CharacterClassInfo;
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+
+	if(CharacterClassInfo == nullptr) return;
+	
 	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 
 	// Primary Attributes
@@ -101,4 +99,27 @@ void UPsychAbilitySystemLibrary::InitializeDefaultAttributes(
 	
 	ASC->ApplyGameplayEffectSpecToSelf(*VitalAttributesSpecHandle.Data.Get());	
 	
+}
+
+void UPsychAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+{
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	
+	if(CharacterClassInfo == nullptr) return;
+	
+	for(TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		ASC->GiveAbility(AbilitySpec);
+	}
+}
+
+UCharacterClassInfo* UPsychAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	APsychGameModeBase* PsychGameMode = Cast<APsychGameModeBase>(
+UGameplayStatics::GetGameMode(WorldContextObject));
+
+	if(PsychGameMode == nullptr) return nullptr;
+
+	return PsychGameMode->CharacterClassInfo;
 }

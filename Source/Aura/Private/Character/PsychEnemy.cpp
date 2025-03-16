@@ -46,11 +46,18 @@ int32 APsychEnemy::GetPlayerLevel()
 	return Level;
 }
 
+void APsychEnemy::Die()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Die();
+}
+
 void APsychEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
+	UPsychAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
 
 	if(UPsychUserWidget* PsychUserWidget = Cast<UPsychUserWidget>(HealthBar->GetUserWidgetObject()))
 	{

@@ -30,8 +30,7 @@ void UPsychProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 	if(CombatInterface)
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
-
-		//projectile rotation is parallel to the ground
+		
 		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 
 		FTransform SpawnTransform;
@@ -54,7 +53,7 @@ void UPsychProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 			SourceASC->MakeEffectContext());
 
 		const FPsychGameplayTags GameplayTags = FPsychGameplayTags::Get();
-		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+		const float ScaledDamage = Damage.GetValueAtLevel(10);
 		
 		
 		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(
