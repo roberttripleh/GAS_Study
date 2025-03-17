@@ -47,10 +47,20 @@ void UPsychProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(
 			GetAvatarActorFromActorInfo());
 
+		FGameplayEffectContextHandle EffectContextHandle = SourceASC->MakeEffectContext();
+		EffectContextHandle.SetAbility(this);
+		EffectContextHandle.AddSourceObject(Projectile);
+		TArray<TWeakObjectPtr<AActor>> Actors;
+		Actors.Add(Projectile);
+		EffectContextHandle.AddActors(Actors);
+		FHitResult HitResult;
+		HitResult.Location = ProjectileTargetLocation;
+		EffectContextHandle.AddHitResult(HitResult);
+
 		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(
 			DamageEffectClass,
 			GetAbilityLevel(),
-			SourceASC->MakeEffectContext());
+			EffectContextHandle);
 
 		const FPsychGameplayTags GameplayTags = FPsychGameplayTags::Get();
 		const float ScaledDamage = Damage.GetValueAtLevel(10);
