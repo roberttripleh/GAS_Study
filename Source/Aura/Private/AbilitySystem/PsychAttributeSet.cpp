@@ -9,6 +9,7 @@
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 #include "PsychGameplayTags.h"
+#include "AbilitySystem/PsychAbilitySystemLibrary.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PsychPlayerController.h"
@@ -160,15 +161,19 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				 
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
+
 			
-			ShowFloatingText(Props, LocalIncomingDamage);
+			const bool bBlock = UPsychAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+			const bool bCriticalHit = UPsychAbilitySystemLibrary::IsCriticalHit(Props.EffectContextHandle);
+			
+			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCriticalHit);
 			
 		}
 	}
 	
 }
 
-void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const
 {
 	if(Props.SourceCharacter != Props.TargetCharacter)
 	{

@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PsychAbilitySystemLibrary.generated.h"
 
+struct FGameplayEffectContextHandle;
 class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
 class UOverlayWidgetController;
@@ -37,4 +38,20 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure,Category="PsychAbilitySystemLibrary|GameplayEffects")
+	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintPure,Category="PsychAbilitySystemLibrary|GameplayEffects")
+	static bool IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|GameplayEffects")
+	static void SetIsBlockedHit(
+		UPARAM(ref)FGameplayEffectContextHandle& EffectContextHandle,
+		bool bInIsBlockedHit);
+
+	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|GameplayEffects")
+	static void SetIsCriticalHit(UPARAM(ref)FGameplayEffectContextHandle& EffectContextHandle,
+		bool bInIsCriticalHit);
+	
 };

@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/PsychAbilitySystemLibrary.h"
 
+#include "PsychAbilityTypes.h"
 #include "Game/PsychGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PsychPlayerState.h"
@@ -122,4 +123,44 @@ UGameplayStatics::GetGameMode(WorldContextObject));
 	if(PsychGameMode == nullptr) return nullptr;
 
 	return PsychGameMode->CharacterClassInfo;
+}
+
+bool UPsychAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if(const FPsychGameplayEffectContext* PsychEffectContext = static_cast<const FPsychGameplayEffectContext*>(
+		EffectContextHandle.Get()))
+	{
+		return PsychEffectContext->IsBlockedHit();
+	}
+	return false;
+}
+
+bool UPsychAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if(const FPsychGameplayEffectContext* PsychEffectContext = static_cast<const FPsychGameplayEffectContext*>(
+	EffectContextHandle.Get()))
+	{
+		return PsychEffectContext->IsCriticalHit();
+	}
+	return false;
+}
+
+void UPsychAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bInIsBlockedHit)
+{
+	if(FPsychGameplayEffectContext* PsychEffectContext = static_cast<FPsychGameplayEffectContext*>(
+		EffectContextHandle.Get()))
+	{
+		PsychEffectContext->SetIsBlockedHit(bInIsBlockedHit);
+	}
+}
+
+void UPsychAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bInIsCriticalHit)
+{
+	if(FPsychGameplayEffectContext* PsychEffectContext = static_cast<FPsychGameplayEffectContext*>(
+	EffectContextHandle.Get()))
+	{
+		PsychEffectContext->SetIsCriticalHit(bInIsCriticalHit);
+	}
 }

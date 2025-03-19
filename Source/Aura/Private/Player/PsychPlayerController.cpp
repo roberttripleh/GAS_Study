@@ -28,7 +28,7 @@ void APsychPlayerController::PlayerTick(float DeltaTime)
 	AutoRun();
 }
 
-void APsychPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+void APsychPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter, bool bBlockedHit, bool bCriticalHit)
 {
 	if(IsValid(TargetCharacter) && DamageTextComponentClass)
 	{
@@ -38,7 +38,7 @@ void APsychPlayerController::ShowDamageNumber_Implementation(float DamageAmount,
 			TargetCharacter->GetRootComponent(),
 			FAttachmentTransformRules::KeepRelativeTransform);
 		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		DamageText->SetDamageText(DamageAmount);
+		DamageText->SetDamageText(DamageAmount,bBlockedHit,bCriticalHit);
 	}
 }
 
