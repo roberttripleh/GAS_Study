@@ -183,7 +183,7 @@ void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float 
 				
 		if(PC)
 		{
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter,bBlockedHit,bCriticalHit);
 		}
 	}
 }
