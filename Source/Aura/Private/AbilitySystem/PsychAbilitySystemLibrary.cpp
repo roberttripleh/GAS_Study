@@ -62,8 +62,6 @@ void UPsychAbilitySystemLibrary::InitializeDefaultAttributes(
 	AActor* AvatarActor = ASC->GetAvatarActor();
 	
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
-
-	if(CharacterClassInfo == nullptr) return;
 	
 	FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 

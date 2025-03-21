@@ -57,7 +57,11 @@ void APsychEnemy::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-	UPsychAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+
+	if(HasAuthority())
+	{
+		UPsychAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+	}
 
 	if(UPsychUserWidget* PsychUserWidget = Cast<UPsychUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -109,7 +113,10 @@ void APsychEnemy::InitAbilityActorInfo()
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UPsychAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
-	InitializeDefaultAttributes();
+	if(HasAuthority())
+	{
+		InitializeDefaultAttributes();
+	}
 }
 
 void APsychEnemy::InitializeDefaultAttributes() const
