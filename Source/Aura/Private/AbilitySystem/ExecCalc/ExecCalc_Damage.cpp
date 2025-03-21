@@ -69,8 +69,15 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluationParameters.TargetTags = TargetTags;
 
 	//----Get Damage Set by Caller Magnitude
+	
+	float Damage = 0.f;
 
-	float Damage = Spec.GetSetByCallerMagnitude(FPsychGameplayTags::Get().Damage);
+	for(const TTuple<FGameplayTag, FGameplayTag>& Pair :
+		FPsychGameplayTags::Get().DamageTypesToResistances)
+	{
+		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(Pair.Key);
+		Damage += DamageTypeValue;
+	}
 
 	//----Block Chance
 	float TargetBlockChance = 0.f;
