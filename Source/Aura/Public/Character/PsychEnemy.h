@@ -11,6 +11,8 @@
 
 
 class UWidgetComponent;
+class UBehaviorTree;
+class APsychAIController;
 /**
  * 
  */
@@ -21,6 +23,8 @@ class AURA_API APsychEnemy : public APsychCharacterBase, public IEnemyInterface
 public:
 	APsychEnemy();
 
+	virtual void PossessedBy(AController* NewController) override;
+	
 	//Enemy Interface
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
@@ -51,7 +55,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
-	virtual void InitializeDefaultAttributes() const;
+	virtual void InitializeDefaultAttributes() const override;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character Class Defaults")
 	int32 Level = 1;
 
@@ -61,6 +65,10 @@ protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly )
 	TObjectPtr<UWidgetComponent> HealthBar;
 
+	UPROPERTY(EditAnywhere,Category="AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
 
+	UPROPERTY()
+	TObjectPtr<APsychAIController> PsychAIController;
 
 };

@@ -10,6 +10,9 @@
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/PsychUserWidget.h"
 #include "PsychGameplayTags.h"
+#include "AI/PsychAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 APsychEnemy::APsychEnemy()
@@ -20,11 +23,39 @@ APsychEnemy::APsychEnemy()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent-> SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f,400.f,0.f);
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+	
 	AttributeSet = CreateDefaultSubobject<UPsychAttributeSet>("AttributeSet");
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("Health Bar");
 	
 	HealthBar->SetupAttachment(GetRootComponent());
+}
+
+void APsychEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if(!HasAuthority()) return;
+	PsychAIController = Cast<APsychAIController>(NewController);
+
+	PsychAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	PsychAIController->RunBehaviorTree(BehaviorTree);
+	
+	PsychAIController->GetBlackboardComponent()->SetValueAsBool(
+		FName("HitReacting"),
+		false);
+	PsychAIController->GetBlackboardComponent()->SetValueAsBool(
+		FName("RangedAttacker"),
+		CharacterClass != ECharacterClass::Warrior);
+
 }
 
 void APsychEnemy::HighlightActor()
@@ -105,6 +136,7 @@ void APsychEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCo
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	PsychAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
 	
 }
 

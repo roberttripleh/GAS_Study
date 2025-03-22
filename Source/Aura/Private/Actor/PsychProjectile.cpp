@@ -72,6 +72,7 @@ void APsychProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		return;
 	}
+	
 	if(!bHit)
 	{
 	UGameplayStatics::PlaySoundAtLocation(
