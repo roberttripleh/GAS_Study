@@ -78,8 +78,8 @@ FVector APsychCharacterBase::GetCombatSocketLocation_Implementation(const FGamep
 
 	// Q: Let’s say you want to have multiple attack sections in the same montage.
 	// How could you make sure you get the correct socket for each attack?
-
-	//Simply use a Gameplay Tag that represents the socket, not the montage.
+	
+	// A: Simply use a Gameplay Tag that represents the socket, not the montage.
 	
 	// for a more data driven approach, this can be a TMap<MontageTags,FName> for the socket location
 	// this will then become an algorithm that will look up the TMap
