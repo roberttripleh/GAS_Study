@@ -83,6 +83,16 @@ void APsychEnemy::Die()
 	Super::Die();
 }
 
+void APsychEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* APsychEnemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
 void APsychEnemy::BeginPlay()
 {
 	Super::BeginPlay();

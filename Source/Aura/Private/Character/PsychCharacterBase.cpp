@@ -66,7 +66,7 @@ void APsychCharacterBase::BeginPlay()
 	
 }
 
-FVector APsychCharacterBase::GetCombatSocketLocation()
+FVector APsychCharacterBase::GetCombatSocketLocation_Implementation()
 {
 	check(Weapon);
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
