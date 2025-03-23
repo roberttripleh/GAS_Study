@@ -193,6 +193,12 @@ void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float 
 		if(APsychPlayerController* PC = Cast<APsychPlayerController>(Props.SourceCharacter->Controller))
 		{
 			PC->ShowDamageNumber(Damage, Props.TargetCharacter,bBlockedHit,bCriticalHit);
+			return;
+		}
+
+		if(APsychPlayerController* PC = Cast<APsychPlayerController>(Props.TargetCharacter->Controller))
+		{
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter,bBlockedHit,bCriticalHit);
 		}
 	}
 }

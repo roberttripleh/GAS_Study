@@ -3,6 +3,7 @@
 
 #include "Character/PsychCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "PsychGameplayTags.h"
 #include "AbilitySystem/PsychAbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
@@ -45,6 +46,11 @@ void APsychCharacterBase::Die()
 	MulticastHandleDeath_Implementation();
 }
 
+TArray<FTaggedMontage> APsychCharacterBase::GetAttackMontages_Implementation()
+{
+	return AttackMontages;
+}
+
 void APsychCharacterBase::MulticastHandleDeath_Implementation()
 {
 	Weapon->SetSimulatePhysics(true);
@@ -58,6 +64,7 @@ void APsychCharacterBase::MulticastHandleDeath_Implementation()
 	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dissolve();
+	bDead = true;
 }
 
 void APsychCharacterBase::BeginPlay() 
@@ -66,10 +73,42 @@ void APsychCharacterBase::BeginPlay()
 	
 }
 
-FVector APsychCharacterBase::GetCombatSocketLocation_Implementation()
+FVector APsychCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+
+	// Q: Let’s say you want to have multiple attack sections in the same montage.
+	// How could you make sure you get the correct socket for each attack?
+
+	//Simply use a Gameplay Tag that represents the socket, not the montage.
+	
+	// for a more data driven approach, this can be a TMap<MontageTags,FName> for the socket location
+	// this will then become an algorithm that will look up the TMap
+	const FPsychGameplayTags& GameplayTags = FPsychGameplayTags::Get();
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon) && IsValid(Weapon))
+	{
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+	}
+
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))
+	{
+		return GetMesh()->GetSocketLocation(RightHandSocketName);
+	}
+	return FVector();
+}
+
+bool APsychCharacterBase::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+AActor* APsychCharacterBase::GetAvatar_Implementation()
+{
+	return this;
 }
 
 void APsychCharacterBase::InitAbilityActorInfo()

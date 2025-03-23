@@ -149,8 +149,11 @@ void APsychEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCo
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
-	PsychAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
-	
+
+	if(PsychAIController && PsychAIController->GetBlackboardComponent())
+	{
+		PsychAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
+	}
 }
 
 void APsychEnemy::InitAbilityActorInfo()

@@ -57,4 +57,16 @@ public:
 	static void SetIsCriticalHit(UPARAM(ref)FGameplayEffectContextHandle& EffectContextHandle,
 		bool bInIsCriticalHit);
 	
+	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|GameplayMechanics")
+	static void GetLivePlayersWithinRadius(
+		const UObject* WorldContextObject,
+		TArray<AActor*>& OutOverlappingActors,
+		const TArray<AActor*>& ActorsToIgnore,
+		float Radius,
+		const FVector& SphereOrigin);
+
+	UFUNCTION(BlueprintPure,Category="PsychAbilitySystemLibrary|GameplayMechanics")
+	static bool IsNotFriend(AActor* FirstActor, AActor* SecondActor);
+	
 };
+ 
