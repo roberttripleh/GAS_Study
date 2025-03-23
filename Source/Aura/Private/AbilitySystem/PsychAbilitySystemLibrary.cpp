@@ -5,6 +5,7 @@
 
 #include "PsychAbilityTypes.h"
 #include "Game/PsychGameModeBase.h"
+#include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PsychPlayerState.h"
 #include "UI/HUD/PsychHUD.h"
@@ -100,7 +101,10 @@ void UPsychAbilitySystemLibrary::InitializeDefaultAttributes(
 	
 }
 
-void UPsychAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+void UPsychAbilitySystemLibrary::GiveStartupAbilities(
+	const UObject* WorldContextObject,
+	UAbilitySystemComponent* ASC,
+	ECharacterClass CharacterClass)
 {
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	
@@ -110,6 +114,18 @@ void UPsychAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContex
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		ASC->GiveAbility(AbilitySpec);
+	}
+	const FCharacterClassDefaultInfo& DefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+
+	for (TSubclassOf<UGameplayAbility> AbilityClass : DefaultInfo.StartupAbilities)
+	{
+		if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(ASC->GetAvatarActor()))
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(
+				AbilityClass,
+				CombatInterface->GetPlayerLevel());
+			ASC->GiveAbility(AbilitySpec);
+		}
 	}
 }
 

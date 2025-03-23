@@ -91,7 +91,10 @@ void APsychEnemy::BeginPlay()
 
 	if(HasAuthority())
 	{
-		UPsychAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+		UPsychAbilitySystemLibrary::GiveStartupAbilities(
+			this,
+			AbilitySystemComponent,
+			CharacterClass);
 	}
 
 	if(UPsychUserWidget* PsychUserWidget = Cast<UPsychUserWidget>(HealthBar->GetUserWidgetObject()))
