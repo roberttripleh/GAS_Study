@@ -80,6 +80,7 @@ int32 APsychEnemy::GetPlayerLevel()
 void APsychEnemy::Die()
 {
 	SetLifeSpan(LifeSpan);
+	if(PsychAIController) PsychAIController->GetBlackboardComponent()->SetValueAsBool(FName("Dead"),true);
 	Super::Die();
 }
 

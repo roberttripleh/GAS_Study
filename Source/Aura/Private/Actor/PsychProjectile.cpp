@@ -73,7 +73,7 @@ void APsychProjectile::OnSphereOverlap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	if(DamageEffectSpecHandle.Data.IsValid() &&
+	if(!DamageEffectSpecHandle.Data.IsValid() ||
 		DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() == OtherActor)
 	{
 		return;
