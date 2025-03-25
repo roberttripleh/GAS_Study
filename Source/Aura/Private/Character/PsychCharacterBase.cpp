@@ -51,6 +51,11 @@ TArray<FTaggedMontage> APsychCharacterBase::GetAttackMontages_Implementation()
 	return AttackMontages;
 }
 
+UNiagaraSystem* APsychCharacterBase::GetBloodEffect_Implementation()
+{
+	return BloodEffect;
+}
+
 void APsychCharacterBase::MulticastHandleDeath_Implementation()
 {
 	Weapon->SetSimulatePhysics(true);
