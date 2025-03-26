@@ -56,6 +56,18 @@ UNiagaraSystem* APsychCharacterBase::GetBloodEffect_Implementation()
 	return BloodEffect;
 }
 
+FTaggedMontage APsychCharacterBase::GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag)
+{
+	for (FTaggedMontage TaggedMontage : AttackMontages)
+	{
+		if (TaggedMontage.MontageTag == MontageTag)
+		{
+			return TaggedMontage;
+		}
+	}
+	return FTaggedMontage();
+}
+
 void APsychCharacterBase::MulticastHandleDeath_Implementation()
 {
 	Weapon->SetSimulatePhysics(true);
@@ -89,17 +101,17 @@ FVector APsychCharacterBase::GetCombatSocketLocation_Implementation(const FGamep
 	// for a more data driven approach, this can be a TMap<MontageTags,FName> for the socket location
 	// this will then become an algorithm that will look up the TMap
 	const FPsychGameplayTags& GameplayTags = FPsychGameplayTags::Get();
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon) && IsValid(Weapon))
+	if(MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Weapon) && IsValid(Weapon))
 	{
 		return Weapon->GetSocketLocation(WeaponTipSocketName);
 	}
 
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))
+	if(MontageTag.MatchesTagExact(GameplayTags.CombatSocket_LeftHand))
 	{
 		return GetMesh()->GetSocketLocation(LeftHandSocketName);
 	}
 
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))
+	if(MontageTag.MatchesTagExact(GameplayTags.CombatSocket_RightHand))
 	{
 		return GetMesh()->GetSocketLocation(RightHandSocketName);
 	}

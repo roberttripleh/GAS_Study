@@ -25,7 +25,7 @@ void UPsychProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocat
 	
 	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(
 		GetAvatarActorFromActorInfo(),
-		FPsychGameplayTags::Get().Montage_Attack_Weapon);
+		FPsychGameplayTags::Get().CombatSocket_Weapon);
 	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 
 	FTransform SpawnTransform;
