@@ -61,6 +61,7 @@ void APsychProjectile::Destroyed()
 			GetActorLocation());
 
 		if(LoopingSoundComponent) LoopingSoundComponent->Stop();
+		bHit = true;
 	}
 	Super::Destroyed();
 }
@@ -96,6 +97,7 @@ void APsychProjectile::OnSphereOverlap(
 		this,
 		ImpactEffect,
 		GetActorLocation());
+		bHit = true;
 	}
 
 	if(LoopingSoundComponent) LoopingSoundComponent->Stop();

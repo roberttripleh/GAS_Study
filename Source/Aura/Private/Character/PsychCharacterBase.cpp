@@ -7,6 +7,7 @@
 #include "AbilitySystem/PsychAbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 APsychCharacterBase::APsychCharacterBase()
 {
@@ -70,6 +71,8 @@ FTaggedMontage APsychCharacterBase::GetTaggedMontageByTag_Implementation(const F
 
 void APsychCharacterBase::MulticastHandleDeath_Implementation()
 {
+	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(),GetActorRotation());
+	
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
