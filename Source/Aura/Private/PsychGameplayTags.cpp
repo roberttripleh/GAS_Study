@@ -232,7 +232,13 @@ void FPsychGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.CombatSocket_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("CombatSocket.RightHand"),
 		FString("Right hand socket")
+		);
+
+	GameplayTags.CombatSocket_Tail = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("CombatSocket.Tail"),
+		FString("Tail socket")
 		);	
+	
 
 	/*
 	 *  Montage Tags

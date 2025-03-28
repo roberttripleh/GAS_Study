@@ -118,6 +118,11 @@ FVector APsychCharacterBase::GetCombatSocketLocation_Implementation(const FGamep
 	{
 		return GetMesh()->GetSocketLocation(RightHandSocketName);
 	}
+	if(MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Tail))
+	{
+		return GetMesh()->GetSocketLocation(TailSocketName);
+	}
+	
 	return FVector();
 }
 
