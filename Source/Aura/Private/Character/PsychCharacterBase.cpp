@@ -69,6 +69,16 @@ FTaggedMontage APsychCharacterBase::GetTaggedMontageByTag_Implementation(const F
 	return FTaggedMontage();
 }
 
+int32 APsychCharacterBase::GetMinionCount_Implementation()
+{
+	return MinionCount; 
+}
+
+void APsychCharacterBase::IncrementMinionCount_Implementation(int32 Amount)
+{
+	MinionCount += Amount;
+}
+
 void APsychCharacterBase::MulticastHandleDeath_Implementation()
 {
 	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(),GetActorRotation());
