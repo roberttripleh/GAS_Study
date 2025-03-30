@@ -53,24 +53,44 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		}
 		);
 
-	Cast<UPsychAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-	[this](const FGameplayTagContainer& AssetTags)
+	if(UPsychAbilitySystemComponent* PsychASC = Cast<UPsychAbilitySystemComponent>(AbilitySystemComponent))
 	{
-		for (const FGameplayTag& Tag : AssetTags)
+		if(PsychASC->bStartupAbilitiesGiven)
 		{
-			//"Message.HealthPotion".MatchesTag("Message") will return True
-			//"Message".MatchesTag("Message.HealthPotion") will return False
-			FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
-			
-			if (Tag.MatchesTag(MessageTag))
+			OnInitializeStartupAbilities(PsychASC);
+		}
+		else
+		{
+			PsychASC->AbilitiesGiven.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+		}
+		
+		PsychASC->EffectAssetTags.AddLambda([this](const FGameplayTagContainer& AssetTags)
+		{
+			for (const FGameplayTag& Tag : AssetTags)
 			{
-				const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable,Tag);
-				MessageWidgetRowDelegate.Broadcast(*Row);	
-			}
+				//"Message.HealthPotion".MatchesTag("Message") will return True
+				//"Message".MatchesTag("Message.HealthPotion") will return False
+				FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
 			
-		} 
+				if (Tag.MatchesTag(MessageTag))
+				{
+					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable,Tag);
+					MessageWidgetRowDelegate.Broadcast(*Row);	
+				}
+			
+			} 
+		}
+		);
 	}
-	);
+}
+
+void UOverlayWidgetController::OnInitializeStartupAbilities(UPsychAbilitySystemComponent* PsychAbilitySystemComponent)
+{
+	//TODO: Get information about all given abilities, look up their ability info and broadcast it to widgets
+
+	if(!PsychAbilitySystemComponent->bStartupAbilitiesGiven) return;
+
+	
 }
 
 

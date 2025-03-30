@@ -24,6 +24,9 @@ void UPsychAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassO
 			GiveAbility(AbilitySpec);
 		}
 	}
+
+	bStartupAbilitiesGiven = true;
+	AbilitiesGiven.Broadcast(this);
 }
 
 void UPsychAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
