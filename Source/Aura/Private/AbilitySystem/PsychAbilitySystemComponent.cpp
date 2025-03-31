@@ -5,6 +5,7 @@
 
 #include "PsychGameplayTags.h"
 #include "AbilitySystem/Abilities/PsychGameplayAbility.h"
+#include "Aura/PsychLogChannels.h"
 
 void UPsychAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -58,6 +59,60 @@ void UPsychAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& I
 		{
 			AbilitySpecInputReleased(AbilitySpec);
 		}
+	}
+}
+
+void UPsychAbilitySystemComponent::ForEachAbility(const FForEachAbility& Delegate)
+{
+	/* Loops through activatable abilities using an active scope lock and execute the delegate that we've passed in
+	 * 
+	 * Will be executed for all activatable abilities
+	 *
+	 */
+	FScopedAbilityListLock ActiveScopeLock(*this);
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (!Delegate.ExecuteIfBound(AbilitySpec))
+		{
+			UE_LOG(LogPsych, Error, TEXT("Failed to execute delegate in %hs"), __FUNCTION__);
+		}
+	}
+}
+
+FGameplayTag UPsychAbilitySystemComponent::GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	if(AbilitySpec.Ability)
+	{
+		for(FGameplayTag Tag : AbilitySpec.Ability->GetAssetTags())
+		{
+			if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Abilities"))))
+			{
+				return Tag;
+			}
+		}
+	}
+	return FGameplayTag();
+}
+
+FGameplayTag UPsychAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	for (FGameplayTag Tag : AbilitySpec.GetDynamicSpecSourceTags())
+	{
+		if(Tag.MatchesTag((FGameplayTag::RequestGameplayTag(FName("InputTag")))))
+		{
+			return Tag;
+		}
+	}
+	return FGameplayTag();
+}
+
+void UPsychAbilitySystemComponent::OnRep_ActivateAbilities()
+{
+	Super::OnRep_ActivateAbilities();
+	if(!bStartupAbilitiesGiven)
+	{
+		bStartupAbilitiesGiven = true;
+		AbilitiesGiven.Broadcast(this);
 	}
 }
 
