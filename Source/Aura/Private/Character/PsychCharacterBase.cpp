@@ -79,6 +79,11 @@ void APsychCharacterBase::IncrementMinionCount_Implementation(int32 Amount)
 	MinionCount += Amount;
 }
 
+ECharacterClass APsychCharacterBase::GetCharacterClass_Implementation()
+{
+	return CharacterClass;
+}
+
 void APsychCharacterBase::MulticastHandleDeath_Implementation()
 {
 	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(),GetActorRotation());

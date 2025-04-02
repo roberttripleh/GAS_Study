@@ -21,6 +21,8 @@ APsychCharacter::APsychCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
+
+	CharacterClass = ECharacterClass::Elementalist;
 }
 
 void APsychCharacter::PossessedBy(AController* NewController)

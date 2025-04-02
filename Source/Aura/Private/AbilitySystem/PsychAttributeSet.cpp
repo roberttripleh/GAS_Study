@@ -10,6 +10,7 @@
 #include "Net/UnrealNetwork.h"
 #include "PsychGameplayTags.h"
 #include "AbilitySystem/PsychAbilitySystemLibrary.h"
+#include "Aura/PsychLogChannels.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PsychPlayerController.h"
@@ -141,8 +142,6 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
-		UE_LOG(LogTemp, Warning, TEXT("ChangedHealth on %s, Health: %f"),
-			*Props.TargetAvatarActor->GetName(), GetHealth());
 	}
 	
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
@@ -182,6 +181,13 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 			ShowFloatingText(Props, LocalIncomingDamage, bBlock, bCriticalHit);
 			
 		}
+	}
+	
+	if(Data.EvaluatedData.Attribute == GetIncomingXPAttribute())
+	{
+		const float LocalIncomingXP = GetIncomingXP();
+		SetIncomingXP(0.f);
+		UE_LOG(LogPsych, Log, TEXT("Incoming XP %f"), LocalIncomingXP);
 	}
 	
 }
