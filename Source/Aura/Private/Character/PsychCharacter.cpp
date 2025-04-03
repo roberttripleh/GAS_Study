@@ -43,6 +43,13 @@ void APsychCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+void APsychCharacter::AddToXP_Implementation(int32 InXP)
+{
+	APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
+	check(PsychPlayerState);
+	PsychPlayerState->AddToXP(InXP);
+}
+
 int32 APsychCharacter::GetPlayerLevel()
 {
 	const APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();

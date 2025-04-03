@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Character/PsychCharacterBase.h"
+#include "Interaction/PlayerInterface.h"
 #include "PsychCharacter.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class AURA_API APsychCharacter : public APsychCharacterBase
+class AURA_API APsychCharacter : public APsychCharacterBase, public IPlayerInterface
 {
 	GENERATED_BODY()
 public:
@@ -18,9 +19,13 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
-	//Combat Interface
+	/** Player Interface **/
+	virtual void AddToXP_Implementation(int32 InXP) override;
+	/** End Player Interface **/
+
+	/** Combat Interface **/
 	int32 GetPlayerLevel() override;
-	//End Combat Interface
+	/** End Combat Interface **/
 	
 private:
 	virtual void InitAbilityActorInfo() override;

@@ -12,6 +12,7 @@
 #include "AbilitySystem/PsychAbilitySystemLibrary.h"
 #include "Aura/PsychLogChannels.h"
 #include "Interaction/CombatInterface.h"
+#include "Interaction/PlayerInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PsychPlayerController.h"
 
@@ -165,6 +166,8 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				{
 					CombatInterface->Die();
 				}
+				
+				SendXPEvent(Props);
 			}
 			else
 			{
@@ -187,9 +190,15 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 	{
 		const float LocalIncomingXP = GetIncomingXP();
 		SetIncomingXP(0.f);
-		UE_LOG(LogPsych, Log, TEXT("Incoming XP %f"), LocalIncomingXP);
+		
+		//TODO: See if we should Level up
+
+		if(Props.SourceCharacter-> Implements<UPlayerInterface>())
+		{
+			IPlayerInterface:: Execute_AddToXP(Props.SourceCharacter, LocalIncomingXP);
+		}
 	}
-	
+
 }
 
 void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const
@@ -206,6 +215,28 @@ void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float 
 		{
 			PC->ShowDamageNumber(Damage, Props.TargetCharacter,bBlockedHit,bCriticalHit);
 		}
+	}
+}
+
+void UPsychAttributeSet::SendXPEvent(const FEffectProperties& Props)
+{
+	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetCharacter))
+	{
+		int32 TargetLevel = CombatInterface->GetPlayerLevel();
+		
+		ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
+		const int32 XPReward = UPsychAbilitySystemLibrary::GetXPRewardForClassAndLevel(Props.TargetCharacter, TargetClass, TargetLevel);
+
+		const FPsychGameplayTags& GameplayTags = FPsychGameplayTags::Get();
+
+		FGameplayEventData Payload;
+		Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;
+		Payload.EventMagnitude = XPReward;
+		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			Props.SourceCharacter,
+			GameplayTags.Attributes_Meta_IncomingXP,
+			Payload);
 	}
 }
 

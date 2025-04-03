@@ -185,6 +185,7 @@ void APsychCharacterBase::AddCharacterAbilities()
 	if(!HasAuthority()) return;
 
 	PsychASC->AddCharacterAbilities(StartupAbilities);
+	PsychASC->AddCharacterPassiveAbilities(StartupPassiveAbilities); 
 	
 }
 
