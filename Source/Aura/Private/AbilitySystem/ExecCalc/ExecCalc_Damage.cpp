@@ -86,8 +86,18 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
 
-	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
-	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
+	int32 SourcePlayerLevel = 1;
+	if(SourceAvatar->Implements<UCombatInterface>())
+	{
+		SourcePlayerLevel = ICombatInterface::Execute_GetPlayerLevel(SourceAvatar);
+	}
+
+	int32 TargetPlayerLevel = 1;
+	if(TargetAvatar->Implements<UCombatInterface>())
+	{
+		TargetPlayerLevel = ICombatInterface::Execute_GetPlayerLevel(TargetAvatar);
+	}
+
 
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
@@ -173,7 +183,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 			FindCurve(FName("ArmorPenetration"),FString());
 
 	const float ArmorPenetrationCoefficient = ArmorPenetrationCurve->
-		Eval(SourceCombatInterface->GetPlayerLevel());
+		Eval(SourcePlayerLevel);
 	
 	//----Ignores a percentage of the Target's Armor.
 	const float EffectiveArmor =
@@ -184,7 +194,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 			FindCurve(FName("EffectiveArmor"),FString());
 
 	const float EffectiveArmorCoefficient = EffectiveArmorCurve->
-		Eval(TargetCombatInterface->GetPlayerLevel());
+		Eval(TargetPlayerLevel);
 	
 	//----Armor ignores a percentage of incoming Damage.
 	Damage *= (100 - EffectiveArmor * EffectiveArmorCoefficient) / 100.f;
@@ -215,7 +225,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 		FindCurve(FName("CriticalHitResistance"),FString());
 
 	const float CriticalHitResistanceCoefficient = CriticalHitResistanceCurve->
-		Eval(TargetCombatInterface->GetPlayerLevel());
+		Eval(TargetPlayerLevel);
 
 	//----Critical hit resistance reduces Critical Hit Chance by a certain percentage
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * CriticalHitResistanceCoefficient;

@@ -195,7 +195,7 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 
 		if(Props.SourceCharacter-> Implements<UPlayerInterface>())
 		{
-			IPlayerInterface:: Execute_AddToXP(Props.SourceCharacter, LocalIncomingXP);
+			IPlayerInterface::Execute_AddToXP(Props.SourceCharacter, LocalIncomingXP);
 		}
 	}
 
@@ -220,10 +220,9 @@ void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float 
 
 void UPsychAttributeSet::SendXPEvent(const FEffectProperties& Props)
 {
-	if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetCharacter))
+	if(Props.TargetCharacter->Implements<UCombatInterface>())
 	{
-		int32 TargetLevel = CombatInterface->GetPlayerLevel();
-		
+		int32 TargetLevel = ICombatInterface::Execute_GetPlayerLevel(Props.TargetCharacter);
 		ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
 		const int32 XPReward = UPsychAbilitySystemLibrary::GetXPRewardForClassAndLevel(Props.TargetCharacter, TargetClass, TargetLevel);
 

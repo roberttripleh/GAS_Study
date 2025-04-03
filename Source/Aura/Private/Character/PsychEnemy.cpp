@@ -72,7 +72,7 @@ void APsychEnemy::UnHighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
-int32 APsychEnemy::GetPlayerLevel()
+int32 APsychEnemy::GetPlayerLevel_Implementation()
 {
 	return Level;
 }

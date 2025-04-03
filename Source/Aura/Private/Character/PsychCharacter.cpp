@@ -50,7 +50,12 @@ void APsychCharacter::AddToXP_Implementation(int32 InXP)
 	PsychPlayerState->AddToXP(InXP);
 }
 
-int32 APsychCharacter::GetPlayerLevel()
+void APsychCharacter::LevelUp_Implementation()
+{
+	IPlayerInterface::LevelUp_Implementation();
+}
+
+int32 APsychCharacter::GetPlayerLevel_Implementation()
 {
 	const APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
 	check(PsychPlayerState);

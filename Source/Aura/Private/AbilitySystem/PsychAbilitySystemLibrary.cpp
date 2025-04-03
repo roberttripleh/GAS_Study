@@ -118,12 +118,12 @@ void UPsychAbilitySystemLibrary::GiveStartupAbilities(
 
 	for (TSubclassOf<UGameplayAbility> AbilityClass : DefaultInfo.StartupAbilities)
 	{
-		if(ICombatInterface* CombatInterface = Cast<ICombatInterface>(ASC->GetAvatarActor()))
+		if(ASC->GetAvatarActor()->Implements<UCombatInterface>())
 		{
 			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(
 				AbilityClass,
-				CombatInterface->GetPlayerLevel());
-			ASC->GiveAbility(AbilitySpec);
+				ICombatInterface::Execute_GetPlayerLevel(ASC->GetAvatarActor()));
+				ASC->GiveAbility(AbilitySpec);
 		}
 	}
 }
