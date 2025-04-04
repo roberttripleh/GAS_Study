@@ -25,6 +25,12 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	APsychPlayerState* PsychPlayerState = CastChecked<APsychPlayerState>(PlayerState);
 	
 	PsychPlayerState->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
+	PsychPlayerState->OnLevelChangedDelegate.AddLambda(
+		[this](int32 NewLevel)
+		{
+			OnPlayerLevelChangedDelegate.Broadcast(NewLevel);
+		}
+	);
 	
 	const UPsychAttributeSet* PsychAttributeSet = CastChecked<UPsychAttributeSet>(AttributeSet);
 	
