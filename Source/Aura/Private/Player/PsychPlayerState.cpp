@@ -24,6 +24,8 @@ void APsychPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	DOREPLIFETIME(APsychPlayerState,Level);
 	DOREPLIFETIME(APsychPlayerState, XP);
+	DOREPLIFETIME(APsychPlayerState, AttributePoints);
+	DOREPLIFETIME(APsychPlayerState, SpellPoints);
 }
 
 UAbilitySystemComponent* APsychPlayerState::GetAbilitySystemComponent() const
@@ -63,4 +65,26 @@ void APsychPlayerState::OnRep_Level(int32 OldLevel)
 void APsychPlayerState::OnRep_XP(int32 OldXP)
 {
 	OnXPChangedDelegate.Broadcast(XP);
+}
+
+void APsychPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
+{
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void APsychPlayerState::OnRep_SpellPoints(int32 OldSpellPoints)
+{
+	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
+}
+
+void APsychPlayerState::AddToAttributePoints(int32 InPoints)
+{
+	AttributePoints += InPoints;
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void APsychPlayerState::AddToSpellPoints(int32 InPoints)
+{
+	SpellPoints += InPoints;
+	OnSpellPointsChangedDelegate.Broadcast(SpellPoints);
 }

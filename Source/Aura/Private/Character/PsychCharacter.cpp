@@ -123,12 +123,30 @@ void APsychCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 
 void APsychCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
 {
-	//TODO: Add AttributePoints to PlayerState
+	APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
+	check(PsychPlayerState);
+	PsychPlayerState->AddToAttributePoints(InAttributePoints);
 }
 
 void APsychCharacter::AddToSpellPoints_Implementation(int32 InSpellPoints)
 {
-	//TODO: Add SpellPoints to PlayerState
+	APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
+	check(PsychPlayerState);
+	PsychPlayerState->AddToSpellPoints(InSpellPoints);
+}
+
+int32 APsychCharacter::GetAttributePoints_Implementation() const
+{
+	const APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
+	check(PsychPlayerState);
+	return PsychPlayerState->GetAttributePoints();
+}
+
+int32 APsychCharacter::GetSpellPoints_Implementation() const
+{
+	const APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
+	check(PsychPlayerState);
+	return PsychPlayerState->GetSpellPoints();
 }
 
 int32 APsychCharacter::GetPlayerLevel_Implementation()

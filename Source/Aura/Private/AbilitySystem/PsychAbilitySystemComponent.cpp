@@ -3,9 +3,11 @@
 
 #include "AbilitySystem/PsychAbilitySystemComponent.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "PsychGameplayTags.h"
 #include "AbilitySystem/Abilities/PsychGameplayAbility.h"
 #include "Aura/PsychLogChannels.h"
+#include "Interaction/PlayerInterface.h"
 
 void UPsychAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -114,6 +116,31 @@ FGameplayTag UPsychAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAb
 		}
 	}
 	return FGameplayTag();
+}
+
+void UPsychAbilitySystemComponent::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	if(GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		if(IPlayerInterface::Execute_GetAttributePoints(GetAvatarActor()) > 0)
+		{
+			ServerUpgradeAttribute(AttributeTag);
+		}
+	}
+}
+
+void UPsychAbilitySystemComponent::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
+{
+	FGameplayEventData Payload;
+	Payload.EventTag = AttributeTag;
+	Payload.EventMagnitude = 1.f;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetAvatarActor(), AttributeTag, Payload);
+
+	if(GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		IPlayerInterface::Execute_AddToAttributePoints(GetAvatarActor(), -1);
+	}
 }
 
 void UPsychAbilitySystemComponent::OnRep_ActivateAbilities()
