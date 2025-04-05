@@ -200,7 +200,6 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 			
 			if(NumLevelUps > 0)
 			{
-				//TODO: Get AttributePointsReward and SpellPointsReward
 				const int32 AttributePointsReward = IPlayerInterface::Execute_GetAttributePointsReward(Props.SourceCharacter, CurrentLevel);
 				const int32 SpellPointsReward = IPlayerInterface::Execute_GetSpellPointsReward(Props.SourceCharacter, CurrentLevel);
 
@@ -208,8 +207,8 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 				IPlayerInterface::Execute_AddToAttributePoints(Props.SourceCharacter, AttributePointsReward);
 				IPlayerInterface::Execute_AddToSpellPoints(Props.SourceCharacter, SpellPointsReward);
 
-				SetHealth(GetMaxHealth());
-				SetMana(GetMaxMana());
+				bTopOffHealth = true;
+				bTopOffMana = true;
 				
 				
 				IPlayerInterface::Execute_LevelUp(Props.SourceCharacter);
@@ -219,6 +218,24 @@ void UPsychAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallb
 		}
 	}
 
+}
+
+void UPsychAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+
+	if(Attribute == GetMaxHealthAttribute() && bTopOffHealth)
+	{
+		SetHealth(GetMaxHealth());
+		bTopOffHealth = false;
+	}
+
+	if(Attribute == GetMaxManaAttribute() && bTopOffMana)
+	{
+		SetMana(GetMaxMana());
+		bTopOffMana = false;
+	}
+	
 }
 
 void UPsychAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const
