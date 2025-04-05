@@ -21,16 +21,16 @@ class AURA_API UPsychAbilitySystemLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 public:
 
-	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
 	static bool MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, APsychHUD*& OutPsychHUD);
 
-	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
 	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
 	static USpellMenuWidgetController* GetSpellMenuWidgetController(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|CharacterClassDefaults")
