@@ -6,6 +6,7 @@
 #include "UI/Widget/PsychUserWidget.h"
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
+#include "UI/WidgetController/SpellMenuWidgetController.h"
 
 UOverlayWidgetController* APsychHUD::GetOverlayWidgetController(const FWidgetControllerParams& WCParams)
 {
@@ -22,12 +23,22 @@ UAttributeMenuWidgetController* APsychHUD::GetAttributeMenuWidgetController(cons
 {
 	if (AttributeMenuWidgetController == nullptr)
 	{
-		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>
-											(this, AttributeMenuWidgetControllerClass);
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this, AttributeMenuWidgetControllerClass);
 		AttributeMenuWidgetController->SetWidgetControllerParams(WCParams);
 		AttributeMenuWidgetController->BindCallbacksToDependencies();
 	}
 	return AttributeMenuWidgetController;
+}
+
+USpellMenuWidgetController* APsychHUD::GetSpellMenuWidgetController(const FWidgetControllerParams& WCParams)
+{
+	if(SpellMenuWidgetController == nullptr)
+	{
+		SpellMenuWidgetController = NewObject<USpellMenuWidgetController>(this,SpellMenuWidgetControllerClass);
+		SpellMenuWidgetController->SetWidgetControllerParams(WCParams);
+		SpellMenuWidgetController->BindCallbacksToDependencies();
+	}
+	return SpellMenuWidgetController;
 }
 
 void APsychHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)

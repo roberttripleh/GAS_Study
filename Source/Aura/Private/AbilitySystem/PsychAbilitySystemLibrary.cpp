@@ -12,24 +12,41 @@
 #include "UI/WidgetController/PsychWidgetController.h"
 
 
-UOverlayWidgetController* UPsychAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
+bool UPsychAbilitySystemLibrary::MakeWidgetControllerParams(
+	const UObject* WorldContextObject,
+	FWidgetControllerParams& OutWCParams,
+	APsychHUD*& OutPsychHUD)
 {
-	
 	if(APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
 	{
-		if(APsychHUD* PsychHUD = Cast<APsychHUD>(PC->GetHUD()))
+		OutPsychHUD = Cast<APsychHUD>(PC->GetHUD());
+		if(OutPsychHUD)
 		{
 			APsychPlayerState* PS = PC->GetPlayerState<APsychPlayerState>();
 			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
 			UAttributeSet* AS = PS->GetAttributeSet();
 
-			const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS);
+			OutWCParams.AttributeSet = AS;
+			OutWCParams.AbilitySystemComponent = ASC;
+			OutWCParams.PlayerState = PS;
+			OutWCParams.PlayerController = PC;
 			
-			return PsychHUD->GetOverlayWidgetController(WidgetControllerParams);
-			
+			return true;
 		}
 	}
+	return false;
+}
 
+UOverlayWidgetController* UPsychAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCParams;
+	APsychHUD* PsychHUD = nullptr;
+	
+	if(MakeWidgetControllerParams(WorldContextObject, WCParams, PsychHUD))
+	{
+		return PsychHUD->GetOverlayWidgetController(WCParams);
+	}
+	
 	return nullptr;
 }
 
@@ -51,6 +68,25 @@ UAttributeMenuWidgetController* UPsychAbilitySystemLibrary::GetAttributeMenuWidg
 		}
 	}
 
+	return nullptr;
+}
+
+USpellMenuWidgetController* UPsychAbilitySystemLibrary::GetSpellMenuWidgetController(const UObject* WorldContextObject)
+{
+	if(APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
+	{
+		if(APsychHUD* PsychHUD = Cast<APsychHUD>(PC->GetHUD()))
+		{
+			APsychPlayerState* PS = PC->GetPlayerState<APsychPlayerState>();
+			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
+			UAttributeSet* AS = PS->GetAttributeSet();
+
+			const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS);
+			
+			return PsychHUD->GetSpellMenuWidgetController(WidgetControllerParams);
+			
+		}
+	}
 	return nullptr;
 }
 

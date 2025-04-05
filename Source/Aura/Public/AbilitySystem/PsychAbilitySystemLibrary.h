@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PsychAbilitySystemLibrary.generated.h"
 
+class USpellMenuWidgetController;
 struct FGameplayEffectContextHandle;
 class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
@@ -21,10 +22,16 @@ class AURA_API UPsychAbilitySystemLibrary : public UBlueprintFunctionLibrary
 public:
 
 	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
+	static bool MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, APsychHUD*& OutPsychHUD);
+
+	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
 	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category= "PsychAbilitySystemLibrary|WidgetController")
+	static USpellMenuWidgetController* GetSpellMenuWidgetController(const UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|CharacterClassDefaults")
 	static void InitializeDefaultAttributes(
