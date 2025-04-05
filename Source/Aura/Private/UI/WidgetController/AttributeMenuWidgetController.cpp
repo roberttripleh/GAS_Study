@@ -9,10 +9,8 @@
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
-	UPsychAttributeSet* AS = CastChecked<UPsychAttributeSet>(AttributeSet);
 	check(AttributeInfo);
-	
-	for (auto& Pair : AS->TagsToAttributes)
+	for (auto& Pair : GetPsychAS()->TagsToAttributes)
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
 		[this, Pair](const FOnAttributeChangeData& Data)
@@ -22,8 +20,7 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 		);
 	}
 	
-	APsychPlayerState* PsychPlayerState = CastChecked<APsychPlayerState>(PlayerState);
-	PsychPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+	GetPsychPS()->OnAttributePointsChangedDelegate.AddLambda(
 		[this](int32 Points)
 		{
 			AttributePointsChangedDelegate.Broadcast(Points);
@@ -33,17 +30,13 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
-	UPsychAttributeSet* AS = CastChecked<UPsychAttributeSet>(AttributeSet);
-
 	check(AttributeInfo);
-
-	for(auto& Pair : AS->TagsToAttributes)
+	for(auto& Pair : GetPsychAS()->TagsToAttributes)
 	{
 		BroadcastAttributeInfo(Pair.Key, Pair.Value());
-	}
+	} 
 	
-	APsychPlayerState* PsychPlayerState = CastChecked<APsychPlayerState>(PlayerState);
-	AttributePointsChangedDelegate.Broadcast(PsychPlayerState->GetAttributePoints());
+	AttributePointsChangedDelegate.Broadcast(GetPsychPS()->GetAttributePoints());
 }
 
 void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)

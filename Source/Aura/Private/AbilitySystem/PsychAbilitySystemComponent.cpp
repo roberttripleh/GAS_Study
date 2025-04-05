@@ -29,7 +29,7 @@ void UPsychAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassO
 	}
 
 	bStartupAbilitiesGiven = true;
-	AbilitiesGiven.Broadcast(this);
+	AbilitiesGiven.Broadcast();
 }
 
 void UPsychAbilitySystemComponent::AddCharacterPassiveAbilities(
@@ -149,7 +149,7 @@ void UPsychAbilitySystemComponent::OnRep_ActivateAbilities()
 	if(!bStartupAbilitiesGiven)
 	{
 		bStartupAbilitiesGiven = true;
-		AbilitiesGiven.Broadcast(this);
+		AbilitiesGiven.Broadcast();
 	}
 }
 
