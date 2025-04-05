@@ -122,8 +122,17 @@ void FPsychGameplayTags::InitializeNativeGameplayTags()
 	FName("InputTag.4"),
 		FString("Input Tag for 4 key")
 		);	
-	
 
+	GameplayTags.InputTag_Passive_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("InputTag.Passive.1"),
+		FString("Input Tag for passive ability 1")
+		);	
+
+	GameplayTags.InputTag_Passive_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("InputTag.Passive.2"),
+		FString("Input Tag for passive ability 2")
+		);	
+	
 	/*
 	 *  Damage Types
 	 */
