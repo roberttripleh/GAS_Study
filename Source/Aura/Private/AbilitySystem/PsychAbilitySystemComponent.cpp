@@ -24,6 +24,7 @@ void UPsychAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassO
 		{
 			FGameplayTagContainer&  DynamicAbilityTags = AbilitySpec.GetDynamicSpecSourceTags();
 			DynamicAbilityTags.AddTag(PsychAbility->StartupInputTag);
+			DynamicAbilityTags.AddTag(FPsychGameplayTags::Get().Abilities_Status_Equipped);
 			GiveAbility(AbilitySpec);
 		}
 	}
@@ -113,6 +114,18 @@ FGameplayTag UPsychAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAb
 		if(Tag.MatchesTag((FGameplayTag::RequestGameplayTag(FName("InputTag")))))
 		{
 			return Tag;
+		}
+	}
+	return FGameplayTag();
+}
+
+FGameplayTag UPsychAbilitySystemComponent::GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	for (FGameplayTag StatusTag : AbilitySpec.GetDynamicSpecSourceTags())
+	{
+		if (StatusTag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Abilities.Status"))))
+		{
+			return StatusTag;
 		}
 	}
 	return FGameplayTag();

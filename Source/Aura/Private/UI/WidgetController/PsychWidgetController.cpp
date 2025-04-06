@@ -51,6 +51,7 @@ void UPsychWidgetController::BroadCastAbilityInfo()
 	{
 		FPsychAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(PsychAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
 		Info.InputTag = PsychAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+		Info.StatusTag = PsychAbilitySystemComponent->GetStatusFromSpec(AbilitySpec);
 		AbilityInfoDelegate.Broadcast(Info);
 	}
 	);
