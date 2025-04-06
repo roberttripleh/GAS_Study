@@ -165,12 +165,22 @@ int32 UPsychAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* Wor
 
 UCharacterClassInfo* UPsychAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
 {
-	APsychGameModeBase* PsychGameMode = Cast<APsychGameModeBase>(
-UGameplayStatics::GetGameMode(WorldContextObject));
+	const APsychGameModeBase* PsychGameMode = Cast<APsychGameModeBase>(
+	UGameplayStatics::GetGameMode(WorldContextObject));
 
 	if(PsychGameMode == nullptr) return nullptr;
 
 	return PsychGameMode->CharacterClassInfo;
+}
+
+UAbilityInfo* UPsychAbilitySystemLibrary::GetAbilityInfo(const UObject* WorldContextObject)
+{
+	const APsychGameModeBase* PsychGameMode = Cast<APsychGameModeBase>(
+	UGameplayStatics::GetGameMode(WorldContextObject));
+
+	if(PsychGameMode == nullptr) return nullptr;
+
+	return PsychGameMode->AbilityInfo;
 }
 
 bool UPsychAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)

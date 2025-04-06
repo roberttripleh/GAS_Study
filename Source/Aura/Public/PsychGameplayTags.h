@@ -61,6 +61,8 @@ struct FPsychGameplayTags
 	FGameplayTag Damage_Arcane;
 	FGameplayTag Damage_Physical;
 
+	FGameplayTag Abilities_None;
+
 	FGameplayTag Abilities_Attack;
 	FGameplayTag Abilities_Summon;
 	
@@ -77,6 +79,8 @@ struct FPsychGameplayTags
 	
 
 	FGameplayTag Abilities_Fire_FireBolt;
+	FGameplayTag Abilities_Lightning_Electrocute;
+	
 	FGameplayTag Cooldown_Fire_FireBolt;
 
 	FGameplayTag CombatSocket_Weapon;
