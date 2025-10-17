@@ -119,10 +119,6 @@ void APsychCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 	APsychPlayerState* PsychPlayerState = GetPlayerState<APsychPlayerState>();
 	check(PsychPlayerState);
 	PsychPlayerState->AddToLevel(InPlayerLevel);
-	if(UPsychAbilitySystemComponent* PsychASC = Cast<UPsychAbilitySystemComponent>(GetAbilitySystemComponent()))
-	{
-		PsychASC->UpdateAbilityStatuses(PsychPlayerState->GetPlayerLevel());
-	}
 }
 
 void APsychCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)

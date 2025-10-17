@@ -7,7 +7,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PsychAbilitySystemLibrary.generated.h"
 
-class UAbilityInfo;
 class USpellMenuWidgetController;
 struct FGameplayEffectContextHandle;
 class UAbilitySystemComponent;
@@ -50,9 +49,6 @@ public:
 	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable,Category="PsychAbilitySystemLibrary|CharacterClassDefaults")
-	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
-	
 	UFUNCTION(BlueprintPure,Category="PsychAbilitySystemLibrary|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
 

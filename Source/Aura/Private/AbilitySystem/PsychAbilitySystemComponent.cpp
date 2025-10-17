@@ -5,9 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "PsychGameplayTags.h"
-#include "AbilitySystem/PsychAbilitySystemLibrary.h"
 #include "AbilitySystem/Abilities/PsychGameplayAbility.h"
-#include "AbilitySystem/Data/AbilityInfo.h"
 #include "Aura/PsychLogChannels.h"
 #include "Interaction/PlayerInterface.h"
 
@@ -133,22 +131,6 @@ FGameplayTag UPsychAbilitySystemComponent::GetStatusFromSpec(const FGameplayAbil
 	return FGameplayTag();
 }
 
-FGameplayAbilitySpec* UPsychAbilitySystemComponent::GetSpecFromAbilityTag(const FGameplayTag& AbilityTag)
-{
-	FScopedAbilityListLock ActiveScopeLock(*this);
-	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
-	{
-		for (FGameplayTag Tag : AbilitySpec.Ability.Get()->AbilityTags)
-		{
-			if(Tag.MatchesTag(AbilityTag))
-			{
-				return &AbilitySpec;
-			}
-		}
-	}
-	return nullptr;
-}
-
 void UPsychAbilitySystemComponent::UpgradeAttribute(const FGameplayTag& AttributeTag)
 {
 	if(GetAvatarActor()->Implements<UPlayerInterface>())
@@ -174,25 +156,6 @@ void UPsychAbilitySystemComponent::ServerUpgradeAttribute_Implementation(const F
 	}
 }
 
-void UPsychAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
-{
-	UAbilityInfo* AbilityInfo = UPsychAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
-	for (const FPsychAbilityInfo& Info : AbilityInfo->AbilityInformation)
-	{
-		if(!Info.AbilityTag.IsValid()) continue;
-		if(Level < Info.LevelRequirement) continue;
-		if(GetSpecFromAbilityTag(Info.AbilityTag) == nullptr)
-		{
-			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Info.Ability, 1);
-			FGameplayTagContainer&  DynamicAbilityTags = AbilitySpec.GetDynamicSpecSourceTags();
-			DynamicAbilityTags.AddTag(FPsychGameplayTags::Get().Abilities_Status_Eligible);
-			GiveAbility(AbilitySpec);
-			MarkAbilitySpecDirty(AbilitySpec);
-			ClientUpdateAbilityStatus(Info.AbilityTag, FPsychGameplayTags::Get().Abilities_Status_Eligible);
-		}
-	}
-}
-
 void UPsychAbilitySystemComponent::OnRep_ActivateAbilities()
 {
 	Super::OnRep_ActivateAbilities();
@@ -201,12 +164,6 @@ void UPsychAbilitySystemComponent::OnRep_ActivateAbilities()
 		bStartupAbilitiesGiven = true;
 		AbilitiesGiven.Broadcast();
 	}
-}
-
-void UPsychAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
-	const FGameplayTag& StatusTag)
-{
-	AbilityStatusChanged.Broadcast(AbilityTag, StatusTag);
 }
 
 void UPsychAbilitySystemComponent::ClientEffectApplied_Implementation(
